@@ -34,7 +34,7 @@ public class ApplicationClass extends Application {
     public static final boolean CLOUD_PAGES_ENABLED = true;
     public static final boolean WAMA_ENABLED = true;
     public static final boolean LOCATION_ENABLED = true;
-    public static final long MIDDLE_TIER_PROPAGATION_MIN_DELAY = DateUtils.MINUTE_IN_MILLIS * 5; // 5 min.
+    public static final long MIDDLE_TIER_PROPAGATION_MIN_DELAY = DateUtils.MINUTE_IN_MILLIS * 5; // 5 minutes
     public static final String EXTRAS_REGISTRATION_EVENT = "event";
     public static final String HELLO_WORLD_PREFERENCES = "ApplicationClass";
     public static final String KEY_PREFS_ALARM_TIME = "mt_alarm_time";
@@ -55,24 +55,24 @@ public class ApplicationClass extends Application {
         SharedPreferences sharedPreferences = getSharedPreferences(HELLO_WORLD_PREFERENCES, MODE_PRIVATE);
         preferencesEditor = sharedPreferences.edit();
 
-        /*
-            A good practice is to register your application to listen for events posted to a private
-            communication bus by the SDK.
+        /**
+         * Register the application to listen for events posted to a private communication bus
+         * by the SDK.
          */
         EventBus.getInstance().register(this);
 
+        /* Register to receive push notifications. */
         try {
-            // Register to receive push notifications.
             ETPush.readyAimFire(new ETPushConfig.Builder(this)
-                            .setEtAppId(getString(R.string.app_id))
-                            .setAccessToken(getString(R.string.access_token))
-                            .setGcmSenderId(getString(R.string.gcm_sender_id))
-                            .setLogLevel(BuildConfig.DEBUG ? Log.VERBOSE : Log.ERROR)
-                            .setAnalyticsEnabled(ANALYTICS_ENABLED)
-                            .setLocationEnabled(LOCATION_ENABLED)
-                            .setPiAnalyticsEnabled(WAMA_ENABLED)
-                            .setCloudPagesEnabled(CLOUD_PAGES_ENABLED)
-                            .build()
+                .setEtAppId(getString(R.string.app_id))
+                .setAccessToken(getString(R.string.access_token))
+                .setGcmSenderId(getString(R.string.gcm_sender_id))
+                .setLogLevel(BuildConfig.DEBUG ? Log.VERBOSE : Log.ERROR)
+                .setAnalyticsEnabled(ANALYTICS_ENABLED)
+                .setLocationEnabled(LOCATION_ENABLED)
+                .setPiAnalyticsEnabled(WAMA_ENABLED)
+                .setCloudPagesEnabled(CLOUD_PAGES_ENABLED)
+                .build()
             );
         } catch (ETException e) {
             Log.e(TAG, e.getMessage(), e);
@@ -80,10 +80,9 @@ public class ApplicationClass extends Application {
     }
 
     /**
-     * Return the application version name as recorded in the app's build.gradle file.  If this is
-     * a debug release then append a "d" to denote such.
+     * Returns the application version name as recorded in the app's build.gradle file.
      *
-     * @return a String representing the application version name
+     * @return  the application version name
      */
     private String getAppVersionName() {
         try {
@@ -94,9 +93,9 @@ public class ApplicationClass extends Application {
     }
 
     /**
-     * Return the application version code as recorded in the app's build.gradle file.
+     * Returns the application version code as recorded in the app's build.gradle file.
      *
-     * @return an int representing the application version code
+     * @return  the application version code
      */
     private int getAppVersionCode() {
         try {
@@ -107,22 +106,18 @@ public class ApplicationClass extends Application {
     }
 
     /**
-     * EventBus callback listening for a RegistrationEvent.
+     * Listens for a RegistrationEvent on EventBus callback.
      *
-     * @param event the type of event we're listening for.
-     *
-     * This method is one of several methods for getting notified when an event
-     * occurs in the SDK.
-     *
-     * They are all called onEvent(), but will have a different parameter to indicate
-     * the event that has occurred.
+     * This method is one of several methods to log notifications when an event occurs in the SDK.
+     * Different attributes indicate which event has occurred.
      *
      * RegistrationEvent will be triggered when the SDK receives the response from the
      * registration as triggered by the com.google.android.c2dm.intent.REGISTRATION intent.
      *
-     * These events are only called if EventBus.getInstance().register() is called
+     * These events are only called if EventBus.getInstance().register() is called.
+     *
+     * @param  event  the type of event we're listening for
      */
-
     public void onEvent(final RegistrationEvent event) {
         if (ETPush.getLogLevel() <= Log.DEBUG) {
             Log.d(TAG, "Marketing Cloud update occurred.");
@@ -140,28 +135,24 @@ public class ApplicationClass extends Application {
         /**
          * BEGIN Developer Helper Notification
          *
-         * Notify me when my changes have been propagated by the Middle Tier to the Marketing
+         * Notify when changes have been propagated by the Middle Tier to the Marketing
          * Cloud.  This should never be required in a production application.
          */
         if (!BuildConfig.DEBUG) {
             return;
         }
 
-        /*
-            The middle tier has a 15 min. delay in data propagation.  Make sure we're waiting an
-            appropriate amount of time before having our tests run.
-        */
+        /* The middle tier has a 15 minute delay in data propagation. */
         long proposedCheckTime = System.currentTimeMillis() + MIDDLE_TIER_PROPAGATION_MIN_DELAY;
+        
         /*
-            Because we have async tasks, never set an alarm for the middle tier that would be
-            earlier than any previous alarm.
-
-            This could be expanded to handle multiple alarms but that is overkill at the moment.
+         * Because of async tasks, never set an alarm for the middle tier that would be
+         * earlier than any previous alarm.
          */
         if (proposedCheckTime < okToCheckMiddleTier) {
             return;
         }
-        // getLastSent() is returning 0, but I need to discuss with team.
+        
         event.setLastSent(System.currentTimeMillis());
 
         okToCheckMiddleTier = proposedCheckTime;
@@ -170,18 +161,17 @@ public class ApplicationClass extends Application {
         Bundle bundle = new Bundle();
         bundle.putSerializable(EXTRAS_REGISTRATION_EVENT, event);
         intent.putExtras(bundle);
-        //PendingIntent pendingIntent = PendingIntent.getBroadcast(this, R.id.mt_alarm, intent, 0);
-        //AlarmManager alarmManager = (AlarmManager) this.getSystemService(Service.ALARM_SERVICE);
-        /*
-            Cancel any existing alarms as we're about to set one that will account for the latest
-            change.
-         */
-//        alarmManager.cancel(pendingIntent);
-//        alarmManager.set(
-//                AlarmManager.RTC_WAKEUP,
-//                okToCheckMiddleTier,
-//                pendingIntent
-//        );
+        // PendingIntent pendingIntent = PendingIntent.getBroadcast(this, R.id.mt_alarm, intent, 0);
+        // AlarmManager alarmManager = (AlarmManager) this.getSystemService(Service.ALARM_SERVICE);
+        
+        /* An alarm to account for the latest change. Cancel any other existing alarms. */
+        
+        // alarmManager.cancel(pendingIntent);
+        // alarmManager.set(
+        //         AlarmManager.RTC_WAKEUP,
+        //         okToCheckMiddleTier,
+        //         pendingIntent
+        // );
 
         preferencesEditor.putLong(KEY_PREFS_ALARM_TIME, okToCheckMiddleTier).apply();
     }

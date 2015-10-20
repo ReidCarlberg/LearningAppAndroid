@@ -1,12 +1,11 @@
 package com.salesforce.kp.wheresreid;
 
 /**
- * CONSTS
- * <p/>
- * Global constants.
+ * CONSTS is the class for global constants.
  *
- * Created by Romina on 10/16/15.
+ * @author	Romina
  */
 public class CONSTS {
+	
     public static final String KEY_PREF_SUBSCRIBER_KEY = "pref_subscriber_key";
 }

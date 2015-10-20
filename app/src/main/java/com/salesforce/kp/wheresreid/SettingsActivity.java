@@ -66,10 +66,11 @@ import com.salesforce.kp.wheresreid.utils.Utils;
  * opens the notification.  This processing shows how to save the data sent.  As well as how to show different Activity or
  * at least different information in the Activity as dictated by the value of the custom key.
  *
- * @author pvandyk
+ * @author  pvandyk
  */
 
 public class SettingsActivity extends PreferenceActivity {
+
     private static final String TAG = "SettingsActivity";
     private SharedPreferences sp;
 
@@ -80,9 +81,7 @@ public class SettingsActivity extends PreferenceActivity {
         sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         addPreferencesFromResource(R.xml.preferences);
 
-        //
-        // SUBSCRIBER KEY PREFERENCE
-        //
+        /* SUBSCRIBER KEY PREFERENCE */
         final Preference skPref = findPreference(CONSTS.KEY_PREF_SUBSCRIBER_KEY);
         if (!sp.getString(CONSTS.KEY_PREF_SUBSCRIBER_KEY, "").isEmpty()) {
             skPref.setSummary(sp.getString(CONSTS.KEY_PREF_SUBSCRIBER_KEY, ""));
@@ -112,7 +111,7 @@ public class SettingsActivity extends PreferenceActivity {
                             return;
                         } else {
 
-                            // save the preference to Shared Preferences
+                            /* save the preference to Shared Preferences */
                             updatePreferencesForKey(CONSTS.KEY_PREF_SUBSCRIBER_KEY, newSubscriberKey);
                             skPref.setSummary(newSubscriberKey);
 
@@ -134,12 +133,9 @@ public class SettingsActivity extends PreferenceActivity {
         });
     }
 
-
-    //
-    // updatePreferencesForKey
-    //
-    // Update the Shared Preferences file for the given String key.
-    //
+    /**
+     * Updates the Shared Preferences file for the given String key.
+     */
     private void updatePreferencesForKey(String key, String value) {
         sp.edit().putString(key, value).apply();
     }
