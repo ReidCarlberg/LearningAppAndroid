@@ -39,6 +39,7 @@ import com.salesforce.kp.wheresreid.utils.Utils;
  */
 
 public class SettingsActivity extends PreferenceActivity {
+
     private static final String TAG = "SettingsActivity";
     private SharedPreferences sp;
 
@@ -49,9 +50,9 @@ public class SettingsActivity extends PreferenceActivity {
         sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         addPreferencesFromResource(R.xml.preferences);
 
-        //
-        // SUBSCRIBER KEY PREFERENCE
-        //
+        
+        /* SUBSCRIBER KEY PREFERENCE */
+
         // KEY_PREF_SUBSCRIBER_KEY must match the key of the EditTextPreference correspondent to the subscriber key.
         final String KEY_PREF_SUBSCRIBER_KEY = "pref_subscriber_key";
 
@@ -83,9 +84,9 @@ public class SettingsActivity extends PreferenceActivity {
                             Utils.flashError(skET, getString(R.string.error_cannot_be_blank));
                             return;
                         } else {
-
-                            // save the preference to Shared Preferences
+                            /* save the preference to Shared Preferences */
                             updatePreferencesForKey(KEY_PREF_SUBSCRIBER_KEY, newSubscriberKey);
+
                             skPref.setSummary(newSubscriberKey);
 
                             try {
@@ -106,12 +107,9 @@ public class SettingsActivity extends PreferenceActivity {
         });
     }
 
-
-    //
-    // updatePreferencesForKey
-    //
-    // Update the Shared Preferences file for the given String key.
-    //
+    /**
+     * Updates the Shared Preferences file for the given String key.
+     */
     private void updatePreferencesForKey(String key, String value) {
         sp.edit().putString(key, value).apply();
     }
