@@ -1,6 +1,7 @@
 package com.salesforce.kp.wheresreid;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -44,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
+        }
+        else if (id == R.id.action_map) {
+            // Creates an Intent that will load Google Maps
+            Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps");
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            startActivity(mapIntent);
         }
 
         return super.onOptionsItemSelected(item);
