@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.exacttarget.etpushsdk.ETException;
+import com.exacttarget.etpushsdk.ETLocationManager;
 import com.exacttarget.etpushsdk.ETPush;
 import com.salesforce.kp.wheresreid.R;
 import com.salesforce.kp.wheresreid.utils.Utils;
@@ -45,6 +46,9 @@ public class SettingsFragment extends PreferenceFragment {
     private PreferenceScreen prefScreen;
 
     private OnFragmentInteractionListener mListener;
+
+    // TAG to print in the console
+    private static final String TAG = SettingsFragment.class.getSimpleName();
 
     public SettingsFragment() {
     }
@@ -105,7 +109,7 @@ public class SettingsFragment extends PreferenceFragment {
                                 pusher.setSubscriberKey(newSubscriberKey);
                             } catch (ETException e) {
                                 if (ETPush.getLogLevel() <= Log.ERROR) {
-                                    Log.e("TAG", e.getMessage(), e);
+                                    Log.e(TAG, e.getMessage(), e);
                                 }
                             }
                         }
@@ -115,6 +119,49 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+
+
+        /* ENABLE LOCATION (GEO and BEACONS) PREFERENCE */
+
+        // KEY_PREF_LOCATION must match the key of the Preference correspondent to the pref_location.
+        final String KEY_PREF_LOCATION = "pref_location";
+        final CheckBoxPreference locationsPref = (CheckBoxPreference) findPreference(KEY_PREF_LOCATION);
+
+        try {
+            locationsPref.setChecked(ETLocationManager.getInstance().isWatchingLocation());
+        } catch (Exception e) {
+            if (ETPush.getLogLevel() <= Log.ERROR) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+            locationsPref.setChecked(false);
+        }
+
+        locationsPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference pref, Object newValue) {
+                Boolean newPrefLocation = (Boolean) newValue;
+
+                // save the preference to Shared Preferences
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putBoolean(KEY_PREF_LOCATION, newPrefLocation);
+                editor.commit();
+                try {
+                    if (newPrefLocation) {
+                        // opt in for location messages
+                        ETLocationManager.getInstance().startWatchingLocation();
+                    } else {
+                        // opt out for location messages
+                        ETLocationManager.getInstance().stopWatchingLocation();
+                    }
+                } catch (ETException e) {
+                    if (ETPush.getLogLevel() <= Log.ERROR) {
+                        Log.e(TAG, e.getMessage(), e);
+                    }
+                }
+                return true;
+            }
+        });
+
 
         this.configureTags();
 

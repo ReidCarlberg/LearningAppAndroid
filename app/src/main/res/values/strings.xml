@@ -7,11 +7,15 @@
     <string name="logo">Logo</string>
 
     <!-- SETTINGS -->
+    <string name="pref_notify_category_title">Notifications</string>
     <string name="pref_personal_info_title">Attributes</string>
     <string name="pref_tag_category_title">Tags</string>
 
     <string name="pref_subscriber_key">Subscriber Key</string>
     <string name="pref_subscriber_key_summ">Please enter a subscriber key (usually email address)</string>
+
+    <string name="pref_location">Location Notifications</string>
+    <string name="pref_location_summ">Receive alerts when you are located near a national park.</string>
 
     <string name="pref_new_tag">New Tag</string>
     <string name="pref_new_tag_summ">Tap here to add a new Tag</string>

@@ -24,5 +24,17 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="pref_key_notify_settings"
+        android:title="@string/pref_notify_category_title">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_location"
+            android:summary="@string/pref_location_summ"
+            android:title="@string/pref_location" />
+
+    </PreferenceCategory>
+
 
 </PreferenceScreen>
