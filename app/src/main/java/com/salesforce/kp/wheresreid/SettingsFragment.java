@@ -117,47 +117,6 @@ public class SettingsFragment extends PreferenceFragment {
         });
 
         this.configureTags();
-
-        final Preference et = findPreference("pref_new_tag");
-
-        et.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-
-                final EditTextPreference skETP = (EditTextPreference) prefScreen.findPreference("pref_new_tag");
-
-                final AlertDialog d = (AlertDialog) skETP.getDialog();
-                final EditText skET = skETP.getEditText();
-                skET.setText(sp.getString("pref_new_tag", ""));
-
-                Button b = d.getButton(AlertDialog.BUTTON_POSITIVE);
-                b.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(android.view.View v) {
-                        String newTagValue = skET.getText().toString().trim();
-                        if (newTagValue.isEmpty()) {
-                            Utils.flashError(skET, getString(R.string.error_cannot_be_blank));
-                            return;
-                        } else {
-                            try {
-                                addNewTag(newTagValue);
-                            } catch (ETException e) {
-                                if (ETPush.getLogLevel() <= Log.ERROR) {
-                                    Log.e("TAG", e.getMessage(), e);
-                                }
-                            }
-                            configureTags();
-                        }
-
-                        d.dismiss();
-                    }
-                });
-
-                return true;
-            }
-        });
     }
 
     @Override
@@ -235,6 +194,45 @@ public class SettingsFragment extends PreferenceFragment {
             this.prefScreen.addPreference(tagsSection);
             // Adds the new Tag section to the PreferenceCategory.
             tagsSection.addPreference(et);
+            // Sets the listener to the new tag preference
+            et.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+
+                    final EditTextPreference skETP = (EditTextPreference) prefScreen.findPreference("pref_new_tag");
+
+                    final AlertDialog d = (AlertDialog) skETP.getDialog();
+                    final EditText skET = skETP.getEditText();
+                    skET.setText(sp.getString("pref_new_tag", ""));
+
+                    Button b = d.getButton(AlertDialog.BUTTON_POSITIVE);
+                    b.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(android.view.View v) {
+                            String newTagValue = skET.getText().toString().trim();
+                            if (newTagValue.isEmpty()) {
+                                Utils.flashError(skET, getString(R.string.error_cannot_be_blank));
+                                return;
+                            } else {
+                                try {
+                                    addNewTag(newTagValue);
+                                } catch (ETException e) {
+                                    if (ETPush.getLogLevel() <= Log.ERROR) {
+                                        Log.e("TAG", e.getMessage(), e);
+                                    }
+                                }
+                                configureTags();
+                            }
+
+                            d.dismiss();
+                        }
+                    });
+
+                    return true;
+                }
+            });
         }
         // Creates the rows out of the tag's list.
         for (String tag : this.allTags){
