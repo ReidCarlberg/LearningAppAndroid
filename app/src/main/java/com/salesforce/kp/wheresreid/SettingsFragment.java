@@ -23,7 +23,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.exacttarget.etpushsdk.ETException;
+import com.exacttarget.etpushsdk.ETLocationManager;
 import com.exacttarget.etpushsdk.ETPush;
+import com.exacttarget.etpushsdk.event.GeofenceResponseEvent;
 import com.salesforce.kp.wheresreid.R;
 import com.salesforce.kp.wheresreid.utils.Utils;
 
