@@ -8,16 +8,23 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.exacttarget.etpushsdk.ETException;
+import com.exacttarget.etpushsdk.ETLocationManager;
 import com.exacttarget.etpushsdk.ETPush;
 import com.exacttarget.etpushsdk.ETPushConfig;
 import com.exacttarget.etpushsdk.data.Attribute;
+import com.exacttarget.etpushsdk.data.Region;
+import com.exacttarget.etpushsdk.event.GeofenceResponseEvent;
 import com.exacttarget.etpushsdk.event.RegistrationEvent;
 import com.exacttarget.etpushsdk.util.EventBus;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 
 
 /**
@@ -109,7 +116,7 @@ public class ApplicationClass extends Application {
                             .setGcmSenderId(getString(R.string.gcm_sender_id))
                             .setLogLevel(BuildConfig.DEBUG ? Log.VERBOSE : Log.ERROR)
                             .setAnalyticsEnabled(ANALYTICS_ENABLED)
-                            .setLocationEnabled(LOCATION_ENABLED)
+                            .setLocationEnabled(true)
                             .setPiAnalyticsEnabled(WAMA_ENABLED)
                             .setCloudPagesEnabled(CLOUD_PAGES_ENABLED)
                             .build()
@@ -221,5 +228,19 @@ public class ApplicationClass extends Application {
 //
 //        preferencesEditor.putLong(KEY_PREFS_ALARM_TIME, okToCheckMiddleTier).apply();
     }
+    
+    public void onEvent(final GeofenceResponseEvent event) {
+        ArrayList<Region> regions = (ArrayList<Region>) event.getFences();
+        for (Region r : regions){
+            McLocation newLocation = new McLocation();
+            LatLng latLng = new LatLng(r.getLatitude(), r.getLongitude());
+            newLocation.setCoordenates(latLng);
+            newLocation.setRadius(r.getRadius());
+            newLocation.setName(r.getName());
+            newLocation.setType("g");
+            McLocationManager.getInstance().getLocations().add(newLocation);
+        }
+    }
+
 }
         
