@@ -42,7 +42,6 @@ dependencies {
     /* Google Play Services for Location and Google Cloud Messaging */
     compile 'com.google.android.gms:play-services-location:7.8.0'
     compile 'com.google.android.gms:play-services-gcm:7.8.0'
-
     /* Google's Support v4 for Notification compatibility */
     compile 'com.radiusnetworks:AndroidIBeaconLibrary:0.7.6'
 }

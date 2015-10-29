@@ -6,6 +6,7 @@
     <string name="action_cloudpage_inbox">CloudPage Inbox</string>
     <string name="action_map">Map</string>
     <string name="logo">Logo</string>
+    <string name="readme_remote_url">https://github.com/PhilCommunication/marketingCloudSDK-android</string>
 
     <!-- SETTINGS -->
     <string name="pref_personal_info_title">Attributes</string>
