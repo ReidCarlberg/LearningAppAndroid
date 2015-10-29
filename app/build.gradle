@@ -42,6 +42,4 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:7.8.0'
     /* Google's Support v4 for Notification compatibility */
     compile 'com.radiusnetworks:AndroidIBeaconLibrary:0.7.6'
-    /* Markdown viewer */
-    compile files('libs/markdownview-1.2.jar')
 }
