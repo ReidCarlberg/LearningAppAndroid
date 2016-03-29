@@ -56,7 +56,7 @@ The code in this repository includes all of the code used to run the fully funct
 
 3. `access_token`: the Access Token for your development app as defined in the App Center section of the Marketing Cloud.
 
-NB: You can use different keys for the staging/testing phase and the production phase.  Staging/testing keys are indicated by the prefix `staging_`.
+You can use different keys for the staging/testing phase and the production phase.  Staging/testing keys are indicated by the prefix `staging_`.
 
 <a name="0002"></a>
 ## Marketing Cloud App Center
